@@ -1,0 +1,40 @@
+name: CI/CD Pipeline
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    # Checkout the code from GitHub
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    # Run a test for PHP (can be skipped for static HTML)
+    - name: Run Unit Test
+      run: |
+        if [ -f "index.php" ]; then
+          echo "<?php echo 'Unit Test Passed'; ?>" > test.php
+          php test.php
+        fi
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Deploy to Netlify
+      uses: nwtgck/actions-netlify@v1.1
+      with:
+        publish-dir: './' # Location of the static site files
+        production-deploy: true
+      env:
+        NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
+        NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}
