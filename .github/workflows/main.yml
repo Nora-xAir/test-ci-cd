@@ -15,7 +15,7 @@ jobs:
     steps:
     # Checkout the code from GitHub
     - name: Checkout code
-      uses: actions/checkout@v2
+      uses: actions/checkout@v3
 
     # Run a test for PHP (can be skipped for static HTML)
     - name: Run Unit Test
@@ -31,7 +31,7 @@ jobs:
 
     steps:
     - name: Deploy to Netlify
-      uses: nwtgck/actions-netlify@v1.1
+      uses: nwtgck/actions-netlify@v1.2
       with:
         publish-dir: './' # Location of the static site files
         production-deploy: true
